@@ -1,0 +1,31 @@
+{
+  "name": "wujie-micro-app",
+  "version": "1.0.0",
+  "description": "基于wujie的微前端应用",
+  "private": true,
+  "scripts": {
+    "install:all": "pnpm install && pnpm -r install",
+    "dev": "pnpm -r --filter=./main-app run dev",
+    "dev:user": "pnpm -r --filter=./sub-apps/user-center run dev",
+    "dev:product": "pnpm -r --filter=./sub-apps/product-management run dev",
+    "dev:order": "pnpm -r --filter=./sub-apps/order-system run dev",
+    "build:all": "pnpm -r run build",
+    "clean": "rimraf **/node_modules"
+  },
+  "keywords": [
+    "wujie",
+    "micro-frontend",
+    "vue",
+    "react"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.0",
+  "engines": {
+    "node": ">=16.0.0",
+    "pnpm": ">=7.0.0"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.1"
+  }
+} 
