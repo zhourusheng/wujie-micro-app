@@ -3,7 +3,6 @@
     v-model:selectedKeys="selectedKeys"
     v-model:openKeys="openKeys"
     mode="inline"
-    :inline-collapsed="isCollapsed"
     theme="dark"
   >
     <a-menu-item key="home" @click="handleMenuClick('/home')">
@@ -187,7 +186,7 @@ const updateMenuState = () => {
 watch(() => route.path, updateMenuState, { immediate: true });
 
 // 监听折叠状态变化
-watch(isCollapsed, (val) => {
+watch(isCollapsed, function(val: boolean) {
   if (val) {
     openKeys.value = []; // 折叠时关闭所有展开的菜单
   }

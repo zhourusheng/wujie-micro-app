@@ -11,6 +11,12 @@ const routes: RouteRecordRaw[] = [
     component: Home,
     meta: { title: '首页' }
   },
+  {
+    path: '/home',
+    name: 'HomePage',
+    component: Home,
+    meta: { title: '首页' }
+  },
   // 用户中心子应用
   {
     path: '/user-center/:pathMatch(.*)*',
