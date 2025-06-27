@@ -1,0 +1,58 @@
+/* 基础样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f0f2f5;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* 保证在wujie中渲染时也能正确显示 */
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.app-container {
+  padding: 16px;
+  min-height: 100vh;
+}
+
+/* 卡片布局样式 */
+.card-container {
+  background: white;
+  border-radius: 2px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* 页面头部样式 */
+.page-header {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 表格样式优化 */
+.ant-table-wrapper {
+  background: #fff;
+}
+
+/* 表单布局 */
+.form-container {
+  max-width: 800px;
+} 
