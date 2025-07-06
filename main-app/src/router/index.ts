@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import WujieView from '../views/WujieView.vue';
 import Home from '../views/Home.vue';
 import NotFound from '../views/NotFound.vue';
 
 // 定义路由
-const routes: RouteRecordRaw[] = [
+const routes = [
   {
     path: '/',
     name: 'Home',
@@ -22,6 +22,14 @@ const routes: RouteRecordRaw[] = [
     path: '/user-center/:pathMatch(.*)*',
     name: 'UserCenter',
     component: WujieView,
+    props: (route: any) => ({ 
+      subApp: 'user-center', 
+      path: Array.isArray(route.params.pathMatch) 
+        ? `/${route.params.pathMatch.join('/')}` 
+        : route.params.pathMatch
+          ? `/${route.params.pathMatch}`
+          : '/list'
+    }),
     meta: { 
       title: '用户中心',
       subApp: 'user-center'
@@ -32,6 +40,14 @@ const routes: RouteRecordRaw[] = [
     path: '/product/:pathMatch(.*)*',
     name: 'ProductManagement',
     component: WujieView,
+    props: (route: any) => ({ 
+      subApp: 'product-management', 
+      path: Array.isArray(route.params.pathMatch) 
+        ? `/${route.params.pathMatch.join('/')}` 
+        : route.params.pathMatch
+          ? `/${route.params.pathMatch}`
+          : '/list'
+    }),
     meta: { 
       title: '商品管理',
       subApp: 'product-management'
@@ -42,6 +58,14 @@ const routes: RouteRecordRaw[] = [
     path: '/order/:pathMatch(.*)*',
     name: 'OrderSystem',
     component: WujieView,
+    props: (route: any) => ({ 
+      subApp: 'order-system', 
+      path: Array.isArray(route.params.pathMatch) 
+        ? `/${route.params.pathMatch.join('/')}` 
+        : route.params.pathMatch
+          ? `/${route.params.pathMatch}`
+          : '/list'
+    }),
     meta: { 
       title: '订单系统',
       subApp: 'order-system'
@@ -59,7 +83,7 @@ const routes: RouteRecordRaw[] = [
 // 创建路由实例
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes: routes as any
 });
 
 // 全局前置守卫

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, useNavigate } from 'react-router-dom';
 import App from './App';
 import './index.css';
 
@@ -13,7 +13,12 @@ declare global {
     __WUJIE_MOUNT?: () => void;
     __WUJIE_UNMOUNT?: () => void;
     $wujie?: {
-      props: Record<string, any>;
+      props: {
+        routePath?: string;
+        routeQuery?: Record<string, string>;
+        routeParams?: Record<string, string>;
+        [key: string]: any;
+      };
       bus: {
         $on: (event: string, callback: Function) => void;
         $emit: (event: string, ...args: any[]) => void;
@@ -22,6 +27,62 @@ declare global {
     };
   }
 }
+
+// 路由包装组件，用于处理主应用传递的路由信息
+const RouterWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    // 处理主应用传递的路由
+    const handleRouteFromMain = () => {
+      if (window.$wujie?.props?.routePath) {
+        const path = window.$wujie.props.routePath;
+        console.log('从主应用接收到路由:', path);
+        navigate(path);
+      }
+    };
+
+    // 初始化时处理路由
+    handleRouteFromMain();
+
+    // 监听主应用路由变化事件
+    if (window.$wujie?.bus) {
+      window.$wujie.bus.$on('product-management:routeChange', (data: any) => {
+        if (data && data.path) {
+          navigate(data.path);
+        }
+      });
+    }
+
+    // 监听props变化
+    const originalPropsGetter = Object.getOwnPropertyDescriptor(window.$wujie || {}, 'props');
+    if (originalPropsGetter) {
+      let currentProps = window.$wujie?.props;
+      Object.defineProperty(window.$wujie, 'props', {
+        get() {
+          return currentProps;
+        },
+        set(newProps) {
+          const oldPath = currentProps?.routePath;
+          currentProps = newProps;
+          
+          if (newProps.routePath && newProps.routePath !== oldPath) {
+            navigate(newProps.routePath);
+          }
+        },
+        enumerable: true,
+        configurable: true
+      });
+    }
+
+    return () => {
+      // 清理监听
+      window.$wujie?.bus?.$off('product-management:routeChange');
+    };
+  }, [navigate]);
+
+  return <>{children}</>;
+};
 
 // 子应用渲染函数
 function render() {
@@ -35,7 +96,9 @@ function render() {
     root.render(
       <React.StrictMode>
         <MemoryRouter>
-          <App />
+          <RouterWrapper>
+            <App />
+          </RouterWrapper>
         </MemoryRouter>
       </React.StrictMode>
     );
