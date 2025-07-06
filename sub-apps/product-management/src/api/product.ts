@@ -1,4 +1,5 @@
 import request from './request';
+import { mockProducts, paginateData, searchProducts, getProductById } from './mock';
 
 // 商品类型定义
 export interface ProductItem {
@@ -35,86 +36,81 @@ export interface PaginationResult<T> {
 
 // 获取商品列表
 export function getProductList(params: ProductQueryParams) {
-  return request({
-    url: '/products',
-    method: 'get',
-    params
-  });
+  // 使用模拟数据而不是实际请求
+  const filtered = searchProducts(params.keyword, params.categoryId, params.status);
+  return Promise.resolve(paginateData(filtered, params.page, params.pageSize));
 }
 
 // 获取商品详情
 export function getProductDetail(id: string | number) {
-  return request({
-    url: `/products/${id}`,
-    method: 'get'
-  });
+  // 使用模拟数据
+  const product = getProductById(id);
+  return Promise.resolve({ data: product });
 }
 
 // 创建商品
 export function createProduct(data: Omit<ProductItem, 'id'>) {
-  return request({
-    url: '/products',
-    method: 'post',
-    data
-  });
+  // 模拟创建商品
+  const newProduct = {
+    ...data,
+    id: mockProducts.length + 1
+  };
+  mockProducts.push(newProduct as ProductItem);
+  return Promise.resolve({ success: true });
 }
 
 // 更新商品
 export function updateProduct(id: string | number, data: Partial<ProductItem>) {
-  return request({
-    url: `/products/${id}`,
-    method: 'put',
-    data
-  });
+  // 模拟更新商品
+  const index = mockProducts.findIndex(item => item.id === Number(id));
+  if (index !== -1) {
+    mockProducts[index] = { ...mockProducts[index], ...data };
+  }
+  return Promise.resolve({ success: true });
 }
 
 // 删除商品
 export function deleteProduct(id: string | number) {
-  return request({
-    url: `/products/${id}`,
-    method: 'delete'
-  });
+  // 模拟删除商品
+  const index = mockProducts.findIndex(item => item.id === Number(id));
+  if (index !== -1) {
+    mockProducts.splice(index, 1);
+  }
+  return Promise.resolve({ success: true });
 }
 
 // 批量删除商品
 export function batchDeleteProducts(ids: (string | number)[]) {
-  return request({
-    url: '/products/batch',
-    method: 'delete',
-    data: { ids }
+  // 模拟批量删除
+  ids.forEach(id => {
+    const index = mockProducts.findIndex(item => item.id === Number(id));
+    if (index !== -1) {
+      mockProducts.splice(index, 1);
+    }
   });
+  return Promise.resolve({ success: true });
 }
 
 // 商品上下架
 export function changeProductStatus(id: string | number, status: 0 | 1) {
-  return request({
-    url: `/products/${id}/status`,
-    method: 'patch',
-    data: { status }
-  });
+  // 模拟状态切换
+  const index = mockProducts.findIndex(item => item.id === Number(id));
+  if (index !== -1) {
+    mockProducts[index].status = status;
+  }
+  return Promise.resolve({ success: true });
 }
 
 // 批量导入商品
 export function importProducts(file: File) {
-  const formData = new FormData();
-  formData.append('file', file);
-  
-  return request({
-    url: '/products/import',
-    method: 'post',
-    data: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  });
+  // 模拟导入，什么都不做
+  return Promise.resolve({ success: true });
 }
 
 // 导出商品数据
 export function exportProducts(params: Partial<ProductQueryParams>) {
-  return request({
-    url: '/products/export',
-    method: 'get',
-    params,
-    responseType: 'blob'
+  // 模拟导出
+  return Promise.resolve({ 
+    data: new Blob(['模拟的导出数据'], { type: 'application/vnd.ms-excel' })
   });
 } 

@@ -17,6 +17,7 @@ const ProductDetail: React.FC = () => {
   const loadProductDetail = async (productId: string) => {
     try {
       setLoading(true);
+      // 注意：mock数据的返回格式可能与实际API不同
       const response = await getProductDetail(productId);
       setProduct(response.data || null);
       setLoading(false);
