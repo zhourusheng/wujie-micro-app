@@ -1,13 +1,36 @@
 {
   "name": "order-system",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "订单系统子应用（Vue2 + js）",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
-  "keywords": [],
+  "keywords": [
+    "wujie",
+    "micro-frontend",
+    "vue2"
+  ],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "vue": "^2.6.14",
+    "vue-router": "^3.5.3",
+    "vuex": "^3.6.2",
+    "element-ui": "^2.15.13",
+    "axios": "^0.27.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.5.19",
+    "@vue/cli-plugin-eslint": "^4.5.19",
+    "@vue/cli-service": "^4.5.19",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "sass": "^1.53.0",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.14"
+  },
   "packageManager": "pnpm@10.11.0"
 }
