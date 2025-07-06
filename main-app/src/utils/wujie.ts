@@ -1,5 +1,4 @@
 import { startApp } from "wujie";
-import type { bus as WujieBus } from "wujie";
 
 // 获取 wujie 的 bus 实例
 // @ts-ignore - wujie 确实导出了 bus，但 TypeScript 类型定义可能有问题
@@ -8,7 +7,7 @@ import { bus } from "wujie";
 // 子应用配置
 export interface SubAppConfig {
   name: string;
-  entry: string;
+  url: string;
   exec?: boolean;
   alive?: boolean;
   credentials?: boolean;
@@ -31,19 +30,19 @@ const subApps: Record<string, SubAppConfig> = {
   // 用户中心子应用
   "user-center": {
     name: "user-center",
-    entry: "//localhost:8001/",
+    url: "http://localhost:8001/",
     alive: true,
   },
   // 商品管理子应用
   "product-management": {
     name: "product-management",
-    entry: "//localhost:8002/",
+    url: "http://localhost:8002/",
     alive: true,
   },
   // 订单系统子应用
   "order-system": {
     name: "order-system",
-    entry: "//localhost:8003/",
+    url: "http://localhost:8003/",
     alive: true,
   }
 };
@@ -94,7 +93,13 @@ export function preloadApps() {
   // 预加载核心应用
   const preloadAppNames = ['user-center', 'product-management', 'order-system'];
   preloadAppNames.forEach(name => {
-    startApp(subApps[name]);
+    if (subApps[name]) {
+      const appConfig = {
+        ...subApps[name],
+        url: subApps[name].url // 确保url参数存在
+      };
+      startApp(appConfig);
+    }
   });
 }
 
@@ -107,6 +112,7 @@ export function startSubApp(name: string, props?: Record<string, any>) {
 
   const options = {
     ...subApps[name],
+    url: subApps[name].url, // 确保url参数存在
     props: {
       ...(subApps[name].props || {}),
       ...(props || {})
@@ -123,6 +129,14 @@ export function setupBus() {
     console.log(`收到${sender}发来的消息:`, data);
     // 向子应用发送token
     bus.$emit("mainApp:setToken", { token: "this-is-main-app-token" });
+  });
+
+  // 监听子应用发送的错误消息
+  bus.$on("error", (data: any, sender: string) => {
+    console.log(`收到${sender}发来的错误:`, data);
+    // 这里可以添加全局错误处理，比如显示错误通知
+    // 例如使用 Ant Design Vue 的 message 组件
+    // message.error(`${sender}: ${data.message}`);
   });
 }
 

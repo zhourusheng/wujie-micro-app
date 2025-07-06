@@ -28,7 +28,7 @@ const subAppName = computed(() => {
 // 获取子应用URL
 const subAppUrl = computed(() => {
   if (!subAppName.value || !subApps[subAppName.value]) return '';
-  return subApps[subAppName.value].entry;
+  return subApps[subAppName.value].url;
 });
 
 // 子应用props (传递给子应用的数据)

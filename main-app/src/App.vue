@@ -9,12 +9,6 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 import LayoutMain from './layouts/LayoutMain.vue';
-import { setupWujie } from './utils/wujie';
-
-onMounted(() => {
-  // 初始化无界微前端
-  setupWujie();
-});
 </script>
 
 <style>
