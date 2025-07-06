@@ -1,77 +1,53 @@
 <template>
   <div class="user-center-app">
+    <nav v-if="!isInWujie" class="app-nav">
+      <router-link to="/list">用户列表</router-link> | 
+      <router-link to="/role">角色管理</router-link> | 
+      <router-link to="/permission">权限配置</router-link>
+    </nav>
     <router-view />
   </div>
 </template>
 
-<script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-
-// 声明 $wujie 类型
-declare global {
-  interface Window {
-    $wujie?: {
-      props: {
-        sendToMain?: (eventName: string, data: any) => void;
-        routePath?: string;
-        routeQuery?: Record<string, string>;
-        routeParams?: Record<string, string>;
-        [key: string]: any;
-      };
+<script>
+export default {
+  name: 'UserCenterApp',
+  data() {
+    return {
+      isInWujie: window.$wujie !== undefined
     };
-  }
-}
-
-const router = useRouter();
-
-// 标记当前环境是否运行在微前端容器中
-const isInWujie = ref(window.$wujie !== undefined);
-
-// 获取从基座传递的数据
-const injectProps = isInWujie.value ? window.$wujie?.props || {} : {};
-
-// 处理主应用传递的路由
-const handleRouteFromMain = () => {
-  if (isInWujie.value && injectProps.routePath) {
-    console.log('从主应用接收到路由:', injectProps.routePath);
+  },
+  watch: {
+    // 监听路由变化，同步给主应用
+    $route() {
+      // 在微前端环境下，主动告知主应用路由跳转
+      if (window.$wujie?.bus) {
+        window.$wujie.bus.$emit("sub-route-change", "user-center", this.$route.path);
+      }
+    }
+  },
+  mounted() {
+    console.log('用户中心子应用已挂载');
     
-    // 去掉开头的斜杠，因为子应用路由不需要
-    const path = injectProps.routePath.startsWith('/') 
-      ? injectProps.routePath 
-      : `/${injectProps.routePath}`;
-    
-    // 如果当前路径与目标路径不同，则导航
-    if (router.currentRoute.value.path !== path) {
-      router.push({
-        path: path,
-        query: injectProps.routeQuery || {}
-      }).catch(err => {
-        console.error('路由跳转失败:', err);
+    // 监听来自主应用的路由变化指令
+    if (window.$wujie?.bus) {
+      window.$wujie.bus.$on("user-center-router-change", (path) => {
+        console.log('收到主应用路由变更指令:', path);
+        // 如果当前路径与目标路径不同，则导航
+        if (this.$route.path !== path) {
+          this.$router.push(path).catch(err => {
+            console.error('路由跳转失败:', err);
+          });
+        }
       });
+    }
+    
+    // 向主应用发送挂载成功的消息
+    if (window.$wujie?.bus) {
+      window.$wujie.bus.$emit("user-center-mounted", { timestamp: Date.now() });
     }
   }
 };
-
-// 监听props变化
-watch(() => window.$wujie?.props?.routePath, (newPath) => {
-  if (newPath) {
-    handleRouteFromMain();
-  }
-}, { immediate: true });
-
-onMounted(() => {
-  console.log('用户中心子应用已挂载');
-  console.log('从基座获取的props:', injectProps);
-  
-  // 初始化时处理路由
-  handleRouteFromMain();
-  
-  // 向基座发送消息
-  if (injectProps.sendToMain && typeof injectProps.sendToMain === 'function') {
-    injectProps.sendToMain('userCenter:mounted', { timestamp: Date.now() });
-  }
-});
 </script>
 
 <style>
@@ -83,5 +59,24 @@ html, body {
 
 .user-center-app {
   height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.app-nav {
+  margin-bottom: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.app-nav a {
+  margin: 0 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.app-nav a.router-link-active {
+  color: #1890ff;
+  font-weight: bold;
 }
 </style> 

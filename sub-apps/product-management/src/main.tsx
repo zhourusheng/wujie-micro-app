@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, MemoryRouter, useNavigate } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, useNavigate, useLocation } from 'react-router-dom';
 import App from './App';
 import './index.css';
 
@@ -28,58 +28,44 @@ declare global {
   }
 }
 
-// 路由包装组件，用于处理主应用传递的路由信息
+// 路由包装组件，用于处理主应用传递的路由信息和同步路由变化
 const RouterWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   React.useEffect(() => {
-    // 处理主应用传递的路由
-    const handleRouteFromMain = () => {
-      if (window.$wujie?.props?.routePath) {
-        const path = window.$wujie.props.routePath;
-        console.log('从主应用接收到路由:', path);
-        navigate(path);
-      }
-    };
-
-    // 初始化时处理路由
-    handleRouteFromMain();
-
     // 监听主应用路由变化事件
     if (window.$wujie?.bus) {
-      window.$wujie.bus.$on('product-management:routeChange', (data: any) => {
-        if (data && data.path) {
-          navigate(data.path);
+      window.$wujie.bus.$on('product-management-router-change', (path: string) => {
+        console.log('收到主应用路由变更指令:', path);
+        if (location.pathname !== path) {
+          navigate(path);
         }
-      });
-    }
-
-    // 监听props变化
-    const originalPropsGetter = Object.getOwnPropertyDescriptor(window.$wujie || {}, 'props');
-    if (originalPropsGetter) {
-      let currentProps = window.$wujie?.props;
-      Object.defineProperty(window.$wujie, 'props', {
-        get() {
-          return currentProps;
-        },
-        set(newProps) {
-          const oldPath = currentProps?.routePath;
-          currentProps = newProps;
-          
-          if (newProps.routePath && newProps.routePath !== oldPath) {
-            navigate(newProps.routePath);
-          }
-        },
-        enumerable: true,
-        configurable: true
       });
     }
 
     return () => {
       // 清理监听
-      window.$wujie?.bus?.$off('product-management:routeChange');
+      if (window.$wujie?.bus) {
+        window.$wujie.bus.$off('product-management-router-change');
+      }
     };
-  }, [navigate]);
+  }, [navigate, location]);
+
+  // 监听路由变化，同步给主应用
+  React.useEffect(() => {
+    if (window.$wujie?.bus) {
+      // 向主应用发送路由变化事件
+      window.$wujie.bus.$emit('sub-route-change', 'product-management', location.pathname);
+    }
+  }, [location]);
+
+  // 应用挂载时向主应用发送消息
+  React.useEffect(() => {
+    if (window.$wujie?.bus) {
+      window.$wujie.bus.$emit('product-management-mounted', { timestamp: Date.now() });
+    }
+  }, []);
 
   return <>{children}</>;
 };
