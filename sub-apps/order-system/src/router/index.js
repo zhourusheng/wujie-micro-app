@@ -13,10 +13,10 @@ const LogisticsTrack = () => import('../views/LogisticsTrack.vue');
 const routes = [
   {
     path: '/',
-    redirect: '/order/list'
+    redirect: '/list'
   },
   {
-    path: '/order/list',
+    path: '/list',
     name: 'OrderList',
     component: OrderList,
     meta: {
@@ -24,7 +24,7 @@ const routes = [
     }
   },
   {
-    path: '/order/detail/:id',
+    path: '/detail/:id',
     name: 'OrderDetail',
     component: OrderDetail,
     meta: {
@@ -32,7 +32,7 @@ const routes = [
     }
   },
   {
-    path: '/order/return',
+    path: '/return',
     name: 'ReturnManage',
     component: ReturnManage,
     meta: {
@@ -40,15 +40,15 @@ const routes = [
     }
   },
   {
-    path: '/order/invoice',
-    name: 'InvoiceManage',
+    path: '/delivery',
+    name: 'DeliveryManage',
     component: InvoiceManage,
     meta: {
-      title: '发票管理'
+      title: '发货管理'
     }
   },
   {
-    path: '/order/logistics',
+    path: '/logistics',
     name: 'LogisticsTrack',
     component: LogisticsTrack,
     meta: {
@@ -59,7 +59,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.NODE_ENV === 'production' ? '/order/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/' : '/',
   routes
 });
 

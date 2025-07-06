@@ -4,6 +4,8 @@ import router from './router';
 import { createPinia } from 'pinia';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
 
 // 声明生命周期钩子，供基座应用调用
 declare global {
@@ -44,6 +46,7 @@ function createVueApp() {
   app.use(pinia);
   app.use(router);
   app.use(Antd);
+  app.use(ElementPlus);
   
   // 返回应用实例
   return app;

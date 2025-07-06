@@ -8,6 +8,7 @@ import ProductList from './pages/product-list';
 import ProductEdit from './pages/product-edit';
 import CategoryManagement from './pages/category-management';
 import InventoryManagement from './pages/inventory-management';
+import BrandManagement from './pages/brand-management';
 
 // 布局组件
 import AppLayout from './components/AppLayout';
@@ -17,12 +18,13 @@ const App: React.FC = () => {
     <ConfigProvider locale={zhCN}>
       <AppLayout>
         <Routes>
-          <Route path="/" element={<Navigate to="/product/list" replace />} />
-          <Route path="/product/list" element={<ProductList />} />
-          <Route path="/product/edit/:id?" element={<ProductEdit />} />
-          <Route path="/product/category" element={<CategoryManagement />} />
-          <Route path="/product/inventory" element={<InventoryManagement />} />
-          <Route path="*" element={<Navigate to="/product/list" replace />} />
+          <Route path="/" element={<Navigate to="/list" replace />} />
+          <Route path="/list" element={<ProductList />} />
+          <Route path="/edit/:id?" element={<ProductEdit />} />
+          <Route path="/category" element={<CategoryManagement />} />
+          <Route path="/brand" element={<BrandManagement />} />
+          <Route path="/inventory" element={<InventoryManagement />} />
+          <Route path="*" element={<Navigate to="/list" replace />} />
         </Routes>
       </AppLayout>
     </ConfigProvider>

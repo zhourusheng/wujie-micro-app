@@ -114,10 +114,10 @@ export function setupBus() {
           mainPath = `/user-center${path}`;
           break;
         case 'product-management':
-          mainPath = `/product${path}`;
+          mainPath = `/product-management${path}`;
           break;
         case 'order-system':
-          mainPath = `/order${path}`;
+          mainPath = `/order-system${path}`;
           break;
         default:
           return;

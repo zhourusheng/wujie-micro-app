@@ -13,52 +13,52 @@
     </a-menu-item>
 
     <!-- 用户中心子应用 -->
-    <a-sub-menu key="user">
+    <a-sub-menu key="user-center">
       <template #icon>
         <user-outlined />
       </template>
       <template #title>用户中心</template>
-      <a-menu-item key="user-list" @click="handleMenuClick('/user-center/list')">
+      <a-menu-item key="user-center-list" @click="handleMenuClick('/user-center/list')">
         <span>用户管理</span>
       </a-menu-item>
-      <a-menu-item key="user-role" @click="handleMenuClick('/user-center/role')">
+      <a-menu-item key="user-center-role" @click="handleMenuClick('/user-center/role')">
         <span>角色管理</span>
       </a-menu-item>
-      <a-menu-item key="user-permission" @click="handleMenuClick('/user-center/permission')">
+      <a-menu-item key="user-center-permission" @click="handleMenuClick('/user-center/permission')">
         <span>权限配置</span>
       </a-menu-item>
     </a-sub-menu>
 
     <!-- 商品管理子应用 -->
-    <a-sub-menu key="product">
+    <a-sub-menu key="product-management">
       <template #icon>
         <shopping-outlined />
       </template>
       <template #title>商品管理</template>
-      <a-menu-item key="product-list" @click="handleMenuClick('/product/list')">
+      <a-menu-item key="product-management-list" @click="handleMenuClick('/product-management/list')">
         <span>商品列表</span>
       </a-menu-item>
-      <a-menu-item key="product-category" @click="handleMenuClick('/product/category')">
+      <a-menu-item key="product-management-category" @click="handleMenuClick('/product-management/category')">
         <span>分类管理</span>
       </a-menu-item>
-      <a-menu-item key="product-brand" @click="handleMenuClick('/product/brand')">
+      <a-menu-item key="product-management-brand" @click="handleMenuClick('/product-management/brand')">
         <span>品牌管理</span>
       </a-menu-item>
     </a-sub-menu>
 
     <!-- 订单系统子应用 -->
-    <a-sub-menu key="order">
+    <a-sub-menu key="order-system">
       <template #icon>
         <file-text-outlined />
       </template>
       <template #title>订单系统</template>
-      <a-menu-item key="order-list" @click="handleMenuClick('/order/list')">
+      <a-menu-item key="order-system-list" @click="handleMenuClick('/order-system/list')">
         <span>订单列表</span>
       </a-menu-item>
-      <a-menu-item key="order-delivery" @click="handleMenuClick('/order/delivery')">
-        <span>发货管理</span>
+      <a-menu-item key="order-system-delivery" @click="handleMenuClick('/order-system/delivery')">
+        <span>发票管理</span>
       </a-menu-item>
-      <a-menu-item key="order-return" @click="handleMenuClick('/order/return')">
+      <a-menu-item key="order-system-return" @click="handleMenuClick('/order-system/return')">
         <span>退货管理</span>
       </a-menu-item>
     </a-sub-menu>
@@ -104,8 +104,15 @@ const updateMenuState = () => {
   // 处理子应用路由
   const pathParts = path.split('/').filter(Boolean);
   if (pathParts.length > 0) {
-    const appName = pathParts[0];
+    let appName = pathParts[0];
     const subPath = pathParts.length > 1 ? pathParts[1] : '';
+    
+    // 根据路径前缀映射到对应的子应用key
+    if (appName === 'product') {
+      appName = 'product-management';
+    } else if (appName === 'order') {
+      appName = 'order-system';
+    }
     
     // 设置展开的菜单
     openKeys.value = [appName];

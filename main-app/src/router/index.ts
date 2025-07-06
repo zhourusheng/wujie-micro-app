@@ -37,7 +37,7 @@ const routes = [
   },
   // 商品管理子应用
   {
-    path: '/product/:pathMatch(.*)*',
+    path: '/product-management/:pathMatch(.*)*',
     name: 'ProductManagement',
     component: WujieView,
     props: (route: any) => ({ 
@@ -55,7 +55,7 @@ const routes = [
   },
   // 订单系统子应用
   {
-    path: '/order/:pathMatch(.*)*',
+    path: '/order-system/:pathMatch(.*)*',
     name: 'OrderSystem',
     component: WujieView,
     props: (route: any) => ({ 

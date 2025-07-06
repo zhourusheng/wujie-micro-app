@@ -51,7 +51,7 @@
       style="width: 100%; margin-top: 20px;">
       <el-table-column prop="orderNo" label="订单号" width="180">
         <template slot-scope="scope">
-          <router-link :to="`/order/detail/${scope.row.id}`" class="link-text">{{ scope.row.orderNo }}</router-link>
+          <router-link :to="`/detail/${scope.row.id}`" class="link-text">{{ scope.row.orderNo }}</router-link>
         </template>
       </el-table-column>
       <el-table-column prop="customer" label="客户姓名" width="120"></el-table-column>
@@ -127,7 +127,7 @@ export default {
     },
     // 查看订单
     viewOrder(order) {
-      this.$router.push(`/order/detail/${order.id}`);
+      this.$router.push(`/detail/${order.id}`);
     },
     // 打印订单
     printOrder(order) {
