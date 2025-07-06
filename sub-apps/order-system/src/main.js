@@ -33,7 +33,7 @@ function render(props = {}) {
 if (window.__WUJIE_MOUNT) {
   // 子应用生命周期函数挂载到window上
   window.__WUJIE_MOUNT = () => {
-    render(window.$wujie?.props);
+    render(window.$wujie && window.$wujie.props);
   };
   
   // 子应用卸载函数

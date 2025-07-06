@@ -9,6 +9,7 @@
     "dev:user": "pnpm -r --filter=./sub-apps/user-center run dev",
     "dev:product": "pnpm -r --filter=./sub-apps/product-management run dev",
     "dev:order": "pnpm -r --filter=./sub-apps/order-system run dev",
+    "dev:all": "pnpm --parallel -r run dev",
     "build:all": "pnpm -r run build",
     "clean": "rimraf **/node_modules"
   },

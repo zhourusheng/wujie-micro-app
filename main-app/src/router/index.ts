@@ -47,46 +47,6 @@ const routes: RouteRecordRaw[] = [
       subApp: 'order-system'
     }
   },
-  // 数据分析子应用
-  {
-    path: '/analytics/:pathMatch(.*)*',
-    name: 'DataAnalytics',
-    component: WujieView,
-    meta: { 
-      title: '数据分析',
-      subApp: 'data-analytics'
-    }
-  },
-  // 营销活动子应用
-  {
-    path: '/marketing/:pathMatch(.*)*',
-    name: 'Marketing',
-    component: WujieView,
-    meta: { 
-      title: '营销活动',
-      subApp: 'marketing'
-    }
-  },
-  // 库存管理子应用
-  {
-    path: '/inventory/:pathMatch(.*)*',
-    name: 'Inventory',
-    component: WujieView,
-    meta: { 
-      title: '库存管理',
-      subApp: 'inventory'
-    }
-  },
-  // 系统设置子应用
-  {
-    path: '/settings/:pathMatch(.*)*',
-    name: 'Settings',
-    component: WujieView,
-    meta: { 
-      title: '系统设置',
-      subApp: 'settings'
-    }
-  },
   // 404页面
   {
     path: '/:pathMatch(.*)*',
@@ -103,7 +63,7 @@ const router = createRouter({
 });
 
 // 全局前置守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach((to: any, from: any, next: any) => {
   // 设置页面标题
   document.title = `${to.meta.title || '未命名页面'} - 微前端平台`;
   next();

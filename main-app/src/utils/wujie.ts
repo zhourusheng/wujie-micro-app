@@ -1,4 +1,9 @@
-import { startApp, bus } from "wujie";
+import { startApp } from "wujie";
+import type { bus as WujieBus } from "wujie";
+
+// 获取 wujie 的 bus 实例
+// @ts-ignore - wujie 确实导出了 bus，但 TypeScript 类型定义可能有问题
+import { bus } from "wujie";
 
 // 子应用配置
 export interface SubAppConfig {
@@ -10,6 +15,15 @@ export interface SubAppConfig {
   degrade?: boolean;
   plugins?: Array<any>;
   props?: Record<string, any>;
+}
+
+// 定义 wujie 窗口接口
+interface WujieWindow extends Window {
+  __WUJIE?: {
+    id: string;
+    mount: () => void;
+    [key: string]: any;
+  };
 }
 
 // 定义所有子应用配置
@@ -31,30 +45,6 @@ const subApps: Record<string, SubAppConfig> = {
     name: "order-system",
     entry: "//localhost:8003/",
     alive: true,
-  },
-  // 数据分析子应用
-  "data-analytics": {
-    name: "data-analytics",
-    entry: "//localhost:8004/",
-    alive: true,
-  },
-  // 营销活动子应用
-  "marketing": {
-    name: "marketing",
-    entry: "//localhost:8005/",
-    alive: true,
-  },
-  // 库存管理子应用
-  "inventory": {
-    name: "inventory",
-    entry: "//localhost:8006/",
-    alive: true,
-  },
-  // 系统设置子应用
-  "settings": {
-    name: "settings",
-    entry: "//localhost:8007/",
-    alive: true,
   }
 };
 
@@ -73,26 +63,26 @@ const defaultOptions = {
       </div>
     </div>`;
   },
-  beforeLoad: (appWindow: Window) => {
-    console.log(`${appWindow.__WUJIE.id} 开始加载`);
+  beforeLoad: (appWindow: WujieWindow) => {
+    console.log(`${appWindow.__WUJIE?.id || '未知应用'} 开始加载`);
   },
-  beforeMount: (appWindow: Window) => {
-    console.log(`${appWindow.__WUJIE.id} 开始挂载`);
+  beforeMount: (appWindow: WujieWindow) => {
+    console.log(`${appWindow.__WUJIE?.id || '未知应用'} 开始挂载`);
   },
-  afterMount: (appWindow: Window) => {
-    console.log(`${appWindow.__WUJIE.id} 挂载完成`);
+  afterMount: (appWindow: WujieWindow) => {
+    console.log(`${appWindow.__WUJIE?.id || '未知应用'} 挂载完成`);
   },
-  beforeUnmount: (appWindow: Window) => {
-    console.log(`${appWindow.__WUJIE.id} 开始卸载`);
+  beforeUnmount: (appWindow: WujieWindow) => {
+    console.log(`${appWindow.__WUJIE?.id || '未知应用'} 开始卸载`);
   },
-  afterUnmount: (appWindow: Window) => {
-    console.log(`${appWindow.__WUJIE.id} 卸载完成`);
+  afterUnmount: (appWindow: WujieWindow) => {
+    console.log(`${appWindow.__WUJIE?.id || '未知应用'} 卸载完成`);
   },
-  activated: (appWindow: Window) => {
-    console.log(`${appWindow.__WUJIE.id} 已激活`);
+  activated: (appWindow: WujieWindow) => {
+    console.log(`${appWindow.__WUJIE?.id || '未知应用'} 已激活`);
   },
-  deactivated: (appWindow: Window) => {
-    console.log(`${appWindow.__WUJIE.id} 已休眠`);
+  deactivated: (appWindow: WujieWindow) => {
+    console.log(`${appWindow.__WUJIE?.id || '未知应用'} 已休眠`);
   },
   loadError: (url: string, e: Error) => {
     console.error(`${url} 加载失败`, e);
@@ -129,7 +119,7 @@ export function startSubApp(name: string, props?: Record<string, any>) {
 // 设置全局通信
 export function setupBus() {
   // 监听子应用发送的消息
-  bus.$on("mainApp:getToken", (data, sender) => {
+  bus.$on("mainApp:getToken", (data: any, sender: string) => {
     console.log(`收到${sender}发来的消息:`, data);
     // 向子应用发送token
     bus.$emit("mainApp:setToken", { token: "this-is-main-app-token" });
