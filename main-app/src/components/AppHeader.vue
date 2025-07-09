@@ -88,6 +88,7 @@ import {
 } from '@ant-design/icons-vue';
 import { useRouter } from 'vue-router';
 import { useGlobalStore } from '../store';
+import { useAuthStore } from '../store/auth-store';
 import { message } from 'ant-design-vue';
 
 // 定义props
@@ -103,14 +104,27 @@ defineEmits(['toggle-collapsed']);
 
 const router = useRouter();
 const globalStore = useGlobalStore();
+const authStore = useAuthStore();
 
 // 获取用户名和头像
-const userName = computed(() => globalStore.userName);
-const userAvatar = computed(() => globalStore.userInfo?.avatar || '');
+const userName = computed(() => {
+  return authStore.userInfo?.username || '未登录';
+});
+
+const userAvatar = computed(() => {
+  // 如果有头像则使用，否则使用默认头像
+  if (authStore.userInfo?.avatar) {
+    return authStore.userInfo.avatar;
+  }
+  // 根据用户名生成随机头像
+  const username = authStore.userInfo?.username || 'user';
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${username}`;
+});
 
 // 退出登录
 const handleLogout = () => {
-  globalStore.logout();
+  // 执行退出登录操作
+  authStore.logoutAction();
   message.success('已退出登录');
   router.push('/login');
 };

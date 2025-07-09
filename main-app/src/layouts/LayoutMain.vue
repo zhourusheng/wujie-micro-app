@@ -23,13 +23,7 @@
 
       <!-- 内容区 -->
       <a-layout-content class="layout-content">
-        <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
-            <keep-alive>
-              <component :is="Component" />
-            </keep-alive>
-          </transition>
-        </router-view>
+        <slot></slot>
       </a-layout-content>
 
       <!-- 页脚 -->
@@ -108,15 +102,5 @@ const toggleCollapsed = () => {
 .layout-footer {
   text-align: center;
   padding: 16px 50px;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style> 

@@ -6,6 +6,7 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 import WujieVue from 'wujie-vue3';
 import { setupWujie } from './utils/wujie';
+import { useAuthStore } from './store/auth-store';
 
 // 创建Vue应用实例
 const app = createApp(App);
@@ -23,8 +24,14 @@ app.use(Antd);
 // 使用Wujie微前端
 app.use(WujieVue);
 
-// 初始化Wujie
-setupWujie();
+// 初始化认证状态
+const authStore = useAuthStore(pinia);
 
-// 挂载应用
-app.mount('#app'); 
+// 验证token有效性
+authStore.checkAuthState().then(() => {
+  // 初始化Wujie
+  setupWujie();
+
+  // 挂载应用
+  app.mount('#app');
+}); 

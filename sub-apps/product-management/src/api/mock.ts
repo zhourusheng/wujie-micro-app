@@ -26,7 +26,7 @@ export const mockProducts: ProductItem[] = [
     price: 6999,
     status: 1,
     stock: 200,
-    images: ['https://img.alicdn.com/imgextra/i1/6000000008078/O1CN01JidlJZ29lBASRBhAv_!!6000000008078-0-octopus.jpg'],
+    images: ['https://bkimg.cdn.bcebos.com/pic/b17eca8065380cd7912353682d1cba345982b3b72ba7?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080'],
     description: '华为最新旗舰手机，搭载麒麟9000处理器',
     specs: {
       '屏幕尺寸': '6.8英寸',
@@ -43,7 +43,7 @@ export const mockProducts: ProductItem[] = [
     price: 8999,
     status: 1,
     stock: 150,
-    images: ['https://img.alicdn.com/imgextra/i4/O1CN01Tnc8wn1VCeOQypWBx_!!6000000002614-0-yinhe.jpg'],
+    images: ['https://bkimg.cdn.bcebos.com/pic/b17eca8065380cd7912353682d1cba345982b3b72ba7?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080'],
     description: 'Apple最新旗舰手机，搭载A17处理器',
     specs: {
       '屏幕尺寸': '6.7英寸',
@@ -60,7 +60,7 @@ export const mockProducts: ProductItem[] = [
     price: 19999,
     status: 1,
     stock: 50,
-    images: ['https://img.alicdn.com/imgextra/i1/6000000007776/O1CN01iD6lO625wT89B7lsW_!!6000000007776-0-octopus.jpg'],
+    images: ['https://bkimg.cdn.bcebos.com/pic/b17eca8065380cd7912353682d1cba345982b3b72ba7?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080'],
     description: 'Apple最新专业笔记本，搭载M3 Max芯片',
     specs: {
       '屏幕尺寸': '16英寸',
@@ -77,7 +77,7 @@ export const mockProducts: ProductItem[] = [
     price: 12999,
     status: 0,
     stock: 30,
-    images: ['https://img.alicdn.com/imgextra/i3/6000000007776/O1CN01TEUMIl25wT89B5YzB_!!6000000007776-0-octopus.jpg'],
+    images: ['https://bkimg.cdn.bcebos.com/pic/b17eca8065380cd7912353682d1cba345982b3b72ba7?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080'],
     description: '联想商务笔记本旗舰，搭载英特尔处理器',
     specs: {
       '屏幕尺寸': '14英寸',
@@ -94,7 +94,7 @@ export const mockProducts: ProductItem[] = [
     price: 24999,
     status: 1,
     stock: 20,
-    images: ['https://img.alicdn.com/imgextra/i1/O1CN01OKtdqi21ylVGELiZ1_!!6000000007046-0-yinhe.jpg'],
+    images: ['https://bkimg.cdn.bcebos.com/pic/b17eca8065380cd7912353682d1cba345982b3b72ba7?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080'],
     description: '佳能全画幅微单相机，8K视频拍摄',
     specs: {
       '传感器': '全画幅CMOS',

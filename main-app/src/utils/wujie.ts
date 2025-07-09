@@ -1,6 +1,7 @@
 import WujieVue from "wujie-vue3";
 import { startApp } from "wujie";
 import router from '../router';
+import { useAuthStore } from '../store/auth-store';
 
 // 子应用配置
 export interface SubAppConfig {
@@ -95,12 +96,25 @@ const defaultProps = {
 export function setupBus() {
   if (WujieVue && typeof WujieVue === 'object' && 'bus' in WujieVue) {
     const bus = WujieVue.bus;
+    const authStore = useAuthStore();
     
-    // 监听子应用发送的消息
-    bus.$on("mainApp:getToken", (data: any, sender: string) => {
-      console.log(`收到${sender}发来的消息:`, data);
-      // 向子应用发送token
-      bus.$emit("mainApp:setToken", { token: "this-is-main-app-token" });
+    // 监听子应用请求token
+    bus.$on("auth:getToken", (data: any, sender: string) => {
+      console.log(`收到${sender}请求token消息:`, data);
+      
+      // 向子应用发送token和用户信息
+      bus.$emit(`auth:setAuthInfo:${sender}`, { 
+        token: authStore.token,
+        userInfo: authStore.userInfo,
+        permissions: authStore.permissions
+      });
+    });
+    
+    // 监听子应用请求登出
+    bus.$on("auth:logout", () => {
+      authStore.logoutAction();
+      // 跳转到登录页
+      window.location.href = '/login';
     });
     
     // 在子应用路由变化时，主应用跳转对应路由高亮菜单栏
@@ -151,6 +165,17 @@ export function setupWujie() {
   // 设置全局通信
   setupBus();
   
+  // 获取认证信息
+  const authStore = useAuthStore();
+  
+  // 只有在用户已登录的情况下才配置和预加载子应用
+  if (!authStore.isLoggedIn) {
+    console.log('用户未登录，不加载子应用');
+    return;
+  }
+  
+  console.log('用户已登录，开始配置子应用');
+  
   // 配置所有子应用
   if (WujieVue && typeof WujieVue === 'object' && 'setupApp' in WujieVue) {
     const setupApp = WujieVue.setupApp;
@@ -161,6 +186,10 @@ export function setupWujie() {
         exec: appConfig.exec !== false,
         props: {
           ...defaultProps,
+          // 注入认证信息到子应用
+          token: authStore.token,
+          userInfo: authStore.userInfo,
+          permissions: authStore.permissions,
           ...(appConfig.props || {}),
         },
         degrade,
@@ -182,6 +211,15 @@ export function setupWujie() {
 
 // 启动指定子应用
 export function startSubApp(name: string, props?: Record<string, any>) {
+  // 获取认证信息
+  const authStore = useAuthStore();
+  
+  // 检查用户是否已登录
+  if (!authStore.isLoggedIn) {
+    console.error('用户未登录，无法启动子应用');
+    return;
+  }
+  
   if (!subApps[name]) {
     console.error(`子应用${name}不存在`);
     return;
@@ -192,6 +230,10 @@ export function startSubApp(name: string, props?: Record<string, any>) {
     url: subApps[name].url,
     props: {
       ...defaultProps,
+      // 注入认证信息到子应用
+      token: authStore.token,
+      userInfo: authStore.userInfo,
+      permissions: authStore.permissions,
       ...(subApps[name].props || {}),
       ...(props || {})
     }
