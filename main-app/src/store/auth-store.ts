@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { login, refreshToken, getUserInfo } from '../api/auth';
-import { useGlobalStore } from '../store';
+import { useGlobalStore } from './index';
 
 interface UserInfo {
   id?: string;
@@ -126,8 +126,9 @@ export const useAuthStore = defineStore('auth', {
         
         return true;
       } catch (error) {
-        console.error('验证token失败:', error);
-        this.clearAuth();
+        console.warn('验证token失败，可能后端服务未启动:', error);
+        // 如果后端服务未启动，不清除token，但返回false
+        // this.clearAuth();
         return false;
       }
     }
